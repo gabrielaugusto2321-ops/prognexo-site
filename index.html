@@ -103,6 +103,11 @@
     .rail-ping{animation:none; opacity:1;}
     .rail-dot{animation:none;}
   }
+  @media(max-width:480px){
+    /* Em telas estreitas o card animado colide com este selo — some com ele
+       em vez de tentar recalcular posições absolutas pra cada largura. */
+    .rail-ping{display:none;}
+  }
   .rail-foot{margin-top:156px; padding-top:20px; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-size:11.5px; color:var(--mute-2);}
   .rail-foot b{color:#fff; font-family:'Space Grotesk'; font-size:16px; display:block; margin-bottom:2px;}
 
