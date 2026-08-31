@@ -2,510 +2,763 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prognexo — O CRM que acompanha cada venda até o pagamento cair</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prognexo — CRM para médicos que vendem e cuidam</title>
+<meta name="description" content="Prognexo conecta suas vendas, seu WhatsApp e seu time de closers num único painel — sem planilha, sem número perdido, sem lead esquecido.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  *{margin:0; padding:0; box-sizing:border-box;}
   :root{
-    --bg:#070b15; --card:#111a2e; --card-glass:rgba(19,28,48,.6); --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.14);
+    --bg:#070b15; --bg-2:#0a1120; --card:#111a2e; --card-flat:#0d1424;
+    --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.14);
     --text:#f1f3f9; --mute:#97a2ba; --mute-2:#5c6883;
-    --teal:#1ac9a8; --teal-dim:#0f7d6c; --teal-glow:rgba(26,201,168,.4); --teal-soft:rgba(26,201,168,.12);
-    --amber:#f0b85c; --amber-glow:rgba(240,184,92,.4); --amber-soft:rgba(240,184,92,.12);
-    --coral:#ea8562; --coral-soft:rgba(234,133,98,.14);
-    --radius:16px;
+    --teal:#1ac9a8; --teal-dim:#0f7d6c; --teal-glow:rgba(26,201,168,.35); --teal-soft:rgba(26,201,168,.1);
+    --amber:#f0b85c; --amber-soft:rgba(240,184,92,.12);
+    --coral:#ea8562;
+    --r-lg:20px; --r-pill:999px;
+    --maxw:1280px;
   }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
-  body{font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); line-height:1.5; -webkit-font-smoothing:antialiased; position:relative; overflow-x:hidden;}
-  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;}
-  a{color:inherit;}
-  img,svg{display:block;}
-  .wrap{max-width:1140px; margin:0 auto; padding:0 28px; position:relative;}
-  @media(max-width:640px){.wrap{padding:0 20px;}}
-
-  /* Ambient floating orbs */
-  .orb{position:fixed; border-radius:50%; filter:blur(90px); pointer-events:none; z-index:0; opacity:.5;}
-  .orb-1{width:520px; height:520px; background:var(--teal); top:-180px; right:-120px; animation:float1 22s ease-in-out infinite;}
-  .orb-2{width:420px; height:420px; background:var(--amber); top:60vh; left:-160px; opacity:.22; animation:float2 26s ease-in-out infinite;}
-  .orb-3{width:380px; height:380px; background:var(--teal-dim); top:140vh; right:-140px; opacity:.2; animation:float1 30s ease-in-out infinite reverse;}
-  @keyframes float1{0%,100%{transform:translate(0,0);} 50%{transform:translate(-40px,50px);}}
-  @keyframes float2{0%,100%{transform:translate(0,0);} 50%{transform:translate(50px,-40px);}}
-  @media(prefers-reduced-motion: reduce){.orb{animation:none;}}
-  @media(max-width:640px){.orb{filter:blur(60px);} .orb-1{width:320px; height:320px;} .orb-2{width:260px; height:260px;} .orb-3{width:240px; height:240px;}}
-
-  nav, header, section, footer{position:relative; z-index:1;}
-
-  /* NAV */
-  nav{position:sticky; top:0; z-index:40; background:rgba(7,11,21,.75); backdrop-filter:blur(16px); border-bottom:1px solid var(--line);}
-  .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:16px 28px; max-width:1140px; margin:0 auto;}
-  .nav-logo{display:flex; align-items:center; gap:10px; color:#fff; font-family:'Space Grotesk'; font-weight:600; font-size:16px;}
-  .nav-mark{width:30px; height:30px; border-radius:8px; background:linear-gradient(135deg,var(--teal),var(--teal-dim)); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#03130f; box-shadow:0 0 24px var(--teal-glow);}
-  .nav-links{display:flex; gap:28px; font-size:13.5px; color:#9aa5bc; font-weight:500;}
-  .nav-links a{transition:.15s;}
-  .nav-links a:hover{color:#fff;}
-  .nav-right{display:flex; align-items:center; gap:14px;}
-  .nav-login{font-size:13.5px; font-weight:600; color:#c3cadb; text-decoration:none; white-space:nowrap;}
-  .nav-login:hover{color:#fff;}
-  .nav-cta{background:var(--teal); color:#03130f; padding:9px 18px; border-radius:8px; font-size:13.5px; font-weight:700; text-decoration:none; white-space:nowrap; box-shadow:0 0 26px var(--teal-glow); transition:.15s;}
-  .nav-cta:hover{transform:translateY(-1px); box-shadow:0 4px 34px var(--teal-glow);}
-  @media(max-width:760px){.nav-links{display:none;} .nav-inner{padding:14px 20px;} .nav-cta{padding:8px 14px; font-size:12.5px;} .nav-login{font-size:12.5px;}}
-
-  /* HERO */
-  .hero{padding:110px 0 0;}
-  @media(max-width:640px){.hero{padding:70px 0 0;}}
-  .hero-inner{display:grid; grid-template-columns:1.05fr .95fr; gap:56px; align-items:center; padding-bottom:80px;}
-  @media(max-width:960px){.hero-inner{grid-template-columns:1fr; padding-bottom:50px; gap:44px;}}
-  .eyebrow{display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:#84eeda; background:var(--teal-soft); border:1px solid rgba(26,201,168,.32); padding:7px 14px; border-radius:20px; margin-bottom:26px;}
-  .hero h1{font-size:56px; line-height:1.03; font-weight:700; letter-spacing:-.025em; margin-bottom:24px;}
-  .hero h1 .grad{background:linear-gradient(100deg,var(--teal) 10%,#7fe4cd 45%,var(--amber) 90%); -webkit-background-clip:text; background-clip:text; color:transparent;}
-  @media(max-width:640px){.hero h1{font-size:32px; letter-spacing:-.02em;}}
-  @media(max-width:380px){.hero h1{font-size:27px;}}
-  .hero p.lead{font-size:18px; color:var(--mute); max-width:480px; margin-bottom:36px;}
-  .hero-ctas{display:flex; gap:12px; flex-wrap:wrap;}
-  .btn-primary{background:var(--teal); color:#03130f; padding:15px 26px; border-radius:10px; font-weight:700; font-size:15px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:.18s; box-shadow:0 0 34px var(--teal-glow);}
-  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 8px 44px var(--teal-glow);}
-  .btn-ghost{background:rgba(255,255,255,.03); color:#fff; padding:15px 24px; border-radius:10px; font-weight:600; font-size:15px; text-decoration:none; border:1px solid var(--line-2); transition:.18s;}
-  .btn-ghost:hover{border-color:rgba(255,255,255,.4); background:rgba(255,255,255,.06);}
-  .hero-note{margin-top:20px; font-size:12.5px; color:var(--mute-2);}
-
-  /* SIGNATURE: glass pipeline rail */
-  .rail-card{background:var(--card-glass); backdrop-filter:blur(20px); border:1px solid var(--line-2); border-radius:20px; padding:26px; position:relative; overflow:hidden; box-shadow:0 40px 90px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.06);}
-  @media(max-width:420px){.rail-card{padding:20px;}}
-  .rail-title{display:flex; align-items:center; gap:8px; font-size:11.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--mute-2); font-weight:600; margin-bottom:20px;}
-  .rail-dot{width:6px; height:6px; border-radius:50%; background:var(--teal); box-shadow:0 0 10px var(--teal-glow); animation:pulse 2s ease-in-out infinite;}
-  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:.3;}}
-  .rail-track{position:relative; height:6px; background:rgba(255,255,255,.08); border-radius:4px; margin:0 6px 26px;}
-  .rail-track::before{content:''; position:absolute; left:0; top:0; height:100%; width:100%; background:linear-gradient(90deg,var(--teal),#7fe4cd); border-radius:4px; opacity:.5; box-shadow:0 0 14px var(--teal-glow);}
-  .rail-stops{display:flex; justify-content:space-between; position:absolute; inset:0; align-items:center;}
-  .rail-stop{width:10px; height:10px; border-radius:50%; background:#1a2437; border:2px solid rgba(255,255,255,.18);}
-  .rail-labels{display:flex; justify-content:space-between; font-size:10.5px; color:var(--mute-2); margin:-20px 0 26px; padding:0 2px;}
-  .rail-labels span:nth-child(1){text-align:left;} .rail-labels span:nth-child(5){text-align:right;}
-  .rail-card-mover{position:absolute; top:104px; left:6px; width:154px; background:#fff; border-radius:12px; padding:12px 14px; box-shadow:0 16px 32px rgba(0,0,0,.6); animation:travel 7s ease-in-out infinite;}
-  .rail-card-mover .name{font-size:12.5px; font-weight:700; color:#0b1220; margin-bottom:3px;}
-  .rail-card-mover .prod{font-size:10.5px; color:#5f6b85; margin-bottom:8px;}
-  .rail-card-mover .tag{display:inline-block; font-size:9px; font-weight:700; padding:2px 7px; border-radius:4px; background:var(--teal-soft); color:var(--teal-dim);}
-  @keyframes travel{
-    0%{ left:6px; } 22%{ left:6px; }
-    28%{ left:calc(25% - 70px); } 47%{ left:calc(25% - 70px); }
-    53%{ left:calc(50% - 70px); } 72%{ left:calc(50% - 70px); }
-    78%{ left:calc(75% - 70px); } 97%{ left:calc(75% - 70px); }
-    100%{ left:calc(75% - 70px); }
+  html{scroll-behavior:auto;}
+  body{
+    font-family:'Inter',sans-serif; background:var(--bg); color:var(--text);
+    line-height:1.55; -webkit-font-smoothing:antialiased; overflow-x:hidden;
   }
-  .rail-ping{position:absolute; top:96px; right:16px; background:var(--teal); color:#03130f; font-size:11px; font-weight:700; padding:7px 13px; border-radius:20px; opacity:0; animation:ping 7s ease-in-out infinite; box-shadow:0 0 24px var(--teal-glow);}
-  @keyframes ping{
-    0%,74%{opacity:0; transform:translateY(6px) scale(.9);}
-    80%,94%{opacity:1; transform:translateY(0) scale(1);}
-    100%{opacity:0; transform:translateY(-4px) scale(.9);}
+  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif; letter-spacing:-.01em;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .container{max-width:var(--maxw); margin:0 auto; padding:0 24px;}
+  section{padding:clamp(72px,9vw,140px) 0;}
+  ::selection{background:var(--teal); color:#04140f;}
+
+  /* ---------- loader ---------- */
+  #loader{
+    position:fixed; top:0; right:0; bottom:0; left:0; background:var(--bg); z-index:999;
+    display:flex; align-items:center; justify-content:center;
+    transition:opacity .6s ease, visibility .6s ease;
   }
+  #loader.hide{opacity:0; visibility:hidden; pointer-events:none;}
+  .loader-mark{font-family:'Space Grotesk'; font-weight:700; font-size:22px; letter-spacing:-.02em; color:var(--text); position:relative;}
+  .loader-mark::after{
+    content:''; position:absolute; left:0; bottom:-8px; height:2px; width:100%;
+    background:linear-gradient(90deg,transparent,var(--teal),transparent);
+    animation:sweep 1.1s ease-in-out infinite;
+  }
+  @keyframes sweep{0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
+
+  /* ---------- background texture ---------- */
+  .bg-field{position:fixed; top:0; right:0; bottom:0; left:0; z-index:-1; overflow:hidden;}
+  .bg-glow{position:absolute; border-radius:50%; filter:blur(90px); opacity:.35;}
+  .bg-glow.a{width:520px; height:520px; background:var(--teal); top:-180px; left:-120px; opacity:.14;}
+  .bg-glow.b{width:460px; height:460px; background:var(--amber); bottom:-160px; right:-100px; opacity:.08;}
+  .bg-grid{
+    position:absolute; top:0; right:0; bottom:0; left:0;
+    background-image:linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:64px 64px; opacity:.25; mask-image:linear-gradient(to bottom, black, transparent 70%);
+  }
+
+  /* ---------- nav ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    padding:18px 0; transition:background .3s ease, border-color .3s ease, padding .3s ease;
+    border-bottom:1px solid transparent;
+  }
+  header.scrolled{background:rgba(7,11,21,.78); backdrop-filter:blur(14px); border-color:var(--line); padding:13px 0;}
+  nav{display:flex; align-items:center; justify-content:space-between;}
+  .logo{font-family:'Space Grotesk'; font-weight:700; font-size:17px; display:flex; align-items:center; gap:9px;}
+  .logo-dot{width:7px; height:7px; border-radius:50%; background:var(--teal); box-shadow:0 0 12px var(--teal-glow);}
+  .nav-links{display:flex; gap:34px; font-size:14px; color:var(--mute);}
+  .nav-links a{transition:color .2s;}
+  .nav-links a:hover{color:var(--text);}
+  .nav-right{display:flex; align-items:center; gap:18px;}
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    font-size:14px; font-weight:600; padding:11px 22px; border-radius:var(--r-pill);
+    cursor:pointer; border:1px solid transparent; transition:transform .18s ease, background .2s, border-color .2s;
+    font-family:'Inter';
+  }
+  .btn:active{transform:scale(.97);}
+  .btn-primary{background:var(--teal); color:#04140f;}
+  .btn-primary:hover{background:#22ddb9;}
+  .btn-ghost{border-color:var(--line-2); color:var(--text);}
+  .btn-ghost:hover{border-color:var(--teal); color:var(--teal);}
+  .link-quiet{font-size:14px; color:var(--mute);}
+  .link-quiet:hover{color:var(--text);}
+  .hamburger{display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px;}
+  .hamburger span{width:20px; height:1.5px; background:var(--text);}
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:100svh; display:flex; align-items:center; padding-top:110px;
+    padding-bottom:60px;
+  }
+  .hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:60px; align-items:center;}
+  .eyebrow{
+    font-size:13px; color:var(--teal); font-weight:600; margin-bottom:20px;
+    display:flex; align-items:center; gap:9px;
+  }
+  .eyebrow-line{width:22px; height:1px; background:var(--teal);}
+  .hero h1{
+    font-size:clamp(34px,4.4vw,54px); line-height:1.08; font-weight:600; margin-bottom:26px;
+  }
+  .hero h1 span{display:block;}
+  .hero h1 .fade-line{color:var(--mute); font-weight:500; font-size:.66em;}
+  .hero p.lede{font-size:17.5px; color:var(--mute); max-width:460px; margin-bottom:36px;}
+  .hero-ctas{display:flex; gap:14px; margin-bottom:52px;}
+  /* 3D tilt mockup */
+  .tilt-stage{perspective:1400px;}
+  .tilt-card{
+    position:relative; transform-style:preserve-3d; will-change:transform;
+    background:linear-gradient(155deg, var(--card), var(--card-flat));
+    border:1px solid var(--line-2); border-radius:24px; padding:22px;
+    box-shadow:0 30px 80px -20px rgba(0,0,0,.6);
+    transition:transform .1s ease-out;
+  }
+  .mock-topbar{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; transform:translateZ(30px);}
+  .mock-dots{display:flex; gap:6px;}
+  .mock-dots span{width:8px; height:8px; border-radius:50%; background:var(--line-2);}
+  .mock-title{font-size:12px; color:var(--mute-2); font-weight:600;}
+  .mock-body{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .mock-panel{
+    background:var(--card-flat); border:1px solid var(--line); border-radius:14px; padding:14px;
+    transform:translateZ(18px);
+  }
+  .mock-panel h4{font-size:11.5px; color:var(--mute); font-weight:600; margin-bottom:10px;}
+  .mock-lead{
+    display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:10px;
+    background:rgba(255,255,255,.03); margin-bottom:7px; font-size:12px;
+  }
+  .mock-lead .avatar{width:20px; height:20px; border-radius:50%; flex-shrink:0;}
+  .mock-lead.t1 .avatar{background:var(--teal);}
+  .mock-lead.t2 .avatar{background:var(--amber);}
+  .mock-lead.t3 .avatar{background:var(--coral);}
+  .mock-chat{transform:translateZ(46px);}
+  .mock-bubble{
+    max-width:80%; padding:8px 12px; border-radius:12px; font-size:11.5px; margin-bottom:8px;
+  }
+  .mock-bubble.in{background:var(--card-flat); border:1px solid var(--line);}
+  .mock-bubble.out{background:var(--teal); color:#04140f; margin-left:auto;}
+  .mock-float{
+    position:absolute; top:-16px; right:-16px; background:var(--teal); color:#04140f;
+    padding:9px 14px; border-radius:12px; font-size:12px; font-weight:700;
+    transform:translateZ(70px); box-shadow:0 12px 30px -8px var(--teal-glow);
+  }
+
+  /* ---------- integrations marquee ---------- */
+  .marquee-wrap{
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:26px 0; overflow:hidden; position:relative;
+  }
+  .marquee-label{font-size:12.5px; color:var(--mute-2); margin-bottom:16px; text-align:center;}
+  .marquee-track{display:flex; gap:56px; width:max-content; animation:marquee 26s linear infinite;}
+  .marquee-wrap:hover .marquee-track{animation-play-state:paused;}
+  .marquee-track span{font-family:'Space Grotesk'; font-size:16px; color:var(--mute); white-space:nowrap; opacity:.7;}
+  @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+  /* ---------- section heads ---------- */
+  .sec-head{max-width:640px; margin-bottom:56px;}
+  .sec-head .kicker{font-size:13px; color:var(--teal); font-weight:600; margin-bottom:12px;}
+  .sec-head h2{font-size:clamp(26px,3vw,36px); font-weight:600; margin-bottom:14px; line-height:1.2;}
+  .sec-head p{color:var(--mute); font-size:16px; max-width:520px;}
+
+  /* ---------- bento ---------- */
+  .bento{display:grid; grid-template-columns:repeat(12,1fr); gap:18px;}
+  .b-card{
+    border-radius:var(--r-lg); padding:26px; position:relative; overflow:hidden;
+    background:var(--card-flat); border:1px solid var(--line);
+  }
+  .b-card h3{font-size:18px; margin-bottom:8px; font-weight:600;}
+  .b-card p{font-size:14px; color:var(--mute); line-height:1.55;}
+  .b-1{grid-column:span 7;}
+  .b-2{grid-column:span 5;}
+  .b-3{grid-column:span 8;}
+  .b-4{grid-column:span 4;}
+  .b-5{grid-column:span 4;}
+  .b-6{grid-column:span 8;}
+
+  .b-1.flagship{
+    background:linear-gradient(160deg, rgba(26,201,168,.1), var(--card));
+    border-color:rgba(26,201,168,.35);
+    box-shadow:0 0 0 1px rgba(26,201,168,.08), 0 30px 60px -30px var(--teal-glow);
+    display:flex; flex-direction:column; justify-content:flex-end; min-height:280px;
+  }
+  .b-1.flagship .tag{
+    position:absolute; top:26px; left:26px; font-size:11.5px; color:var(--teal); font-weight:700;
+    background:var(--teal-soft); padding:5px 11px; border-radius:var(--r-pill);
+  }
+  .b-1.flagship .chat-preview{position:absolute; top:26px; right:26px; width:150px;}
+  .b-icon{
+    width:38px; height:38px; border-radius:11px; background:var(--card); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; margin-bottom:16px; font-size:17px;
+  }
+
+  /* ---------- how it works — pinned scroll ---------- */
+  .how-pin{position:relative;}
+  .how-stage{display:grid; grid-template-columns:.85fr 1.15fr; gap:70px; align-items:start;}
+  .how-steps-list{position:sticky; top:120px; display:flex; flex-direction:column; gap:2px;}
+  .how-step{
+    padding:22px 0; border-top:1px solid var(--line); cursor:pointer;
+    opacity:.4; transition:opacity .3s ease;
+  }
+  .how-step:last-child{border-bottom:1px solid var(--line);}
+  .how-step.active{opacity:1;}
+  .how-step-num{font-family:'Space Grotesk'; font-size:13px; color:var(--teal); font-weight:700; margin-bottom:6px;}
+  .how-step h3{font-size:19px; font-weight:600; margin-bottom:6px;}
+  .how-step p{font-size:14px; color:var(--mute); max-width:340px; display:none;}
+  .how-step.active p{display:block;}
+
+  .how-visual{
+    border-radius:var(--r-lg); border:1px solid var(--line); background:var(--card-flat);
+    height:460px; position:relative; overflow:hidden;
+  }
+  .how-frame{
+    position:absolute; top:0; right:0; bottom:0; left:0; padding:32px; opacity:0; transition:opacity .45s ease;
+    display:flex; flex-direction:column; justify-content:center; gap:12px;
+  }
+  .how-frame.active{opacity:1;}
+  .flow-badge{
+    display:inline-flex; align-items:center; gap:8px; padding:9px 14px; border-radius:11px;
+    background:var(--card); border:1px solid var(--line); font-size:13px; width:fit-content;
+  }
+  .flow-badge .dot{width:7px; height:7px; border-radius:50%; background:var(--teal);}
+  .flow-arrow{color:var(--mute-2); font-size:13px; margin-left:19px;}
+
+  /* ---------- use-cases ---------- */
+  .usecases{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  .uc-card{padding:28px; border-radius:var(--r-lg); border:1px solid var(--line); background:var(--card-flat);}
+  .uc-card .num{font-family:'Space Grotesk'; font-size:13px; color:var(--mute-2); margin-bottom:18px;}
+  .uc-card h3{font-size:18px; margin-bottom:10px; font-weight:600;}
+  .uc-card p{font-size:14px; color:var(--mute);}
+
+  /* ---------- pricing ---------- */
+  .price-toggle{
+    display:inline-flex; background:var(--card-flat); border:1px solid var(--line); border-radius:var(--r-pill);
+    padding:4px; gap:2px; margin-bottom:44px;
+  }
+  .price-toggle button{
+    border:none; background:transparent; color:var(--mute); font-family:'Inter'; font-size:13px; font-weight:600;
+    padding:9px 16px; border-radius:var(--r-pill); cursor:pointer; transition:.2s;
+  }
+  .price-toggle button.active{background:var(--teal); color:#04140f;}
+  .price-grid{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+  .price-card{border-radius:var(--r-lg); border:1px solid var(--line); background:var(--card-flat); padding:34px;}
+  .price-card.highlight{
+    border-color:rgba(26,201,168,.4); background:linear-gradient(160deg, rgba(26,201,168,.07), var(--card-flat));
+    box-shadow:0 30px 60px -35px var(--teal-glow);
+  }
+  .price-card .plan-name{font-size:14px; color:var(--mute); font-weight:600; margin-bottom:14px;}
+  .price-card .plan-value{font-family:'Space Grotesk'; font-size:40px; font-weight:700; margin-bottom:2px;}
+  .price-card .plan-value sup{font-size:16px; font-weight:600; margin-right:2px;}
+  .price-card .plan-cycle{font-size:13px; color:var(--mute-2); margin-bottom:26px;}
+  .price-feats{list-style:none; margin-bottom:30px;}
+  .price-feats li{
+    display:flex; gap:10px; font-size:14px; color:var(--mute); padding:8px 0; border-top:1px solid var(--line);
+  }
+  .price-feats li:first-child{border-top:none;}
+  .price-feats li .ck{color:var(--teal); flex-shrink:0;}
+
+  /* ---------- faq ---------- */
+  .faq-list{max-width:760px;}
+  .faq-item{border-top:1px solid var(--line);}
+  .faq-item:last-child{border-bottom:1px solid var(--line);}
+  .faq-q{
+    display:flex; justify-content:space-between; align-items:center; gap:20px;
+    padding:22px 0; cursor:pointer; font-size:16px; font-weight:600;
+  }
+  .faq-plus{font-size:20px; color:var(--mute); transition:transform .3s ease; flex-shrink:0;}
+  .faq-item.open .faq-plus{transform:rotate(45deg); color:var(--teal);}
+  .faq-a{max-height:0; overflow:hidden; transition:max-height .35s ease;}
+  .faq-a p{padding-bottom:22px; color:var(--mute); font-size:14.5px; max-width:600px; line-height:1.6;}
+
+  /* ---------- final cta ---------- */
+  .final-cta{text-align:left; position:relative;}
+  .final-cta-inner{
+    border-radius:28px; border:1px solid var(--line-2); padding:clamp(48px,7vw,90px);
+    background:radial-gradient(circle at 20% 20%, rgba(26,201,168,.1), transparent 55%), var(--card-flat);
+    position:relative; overflow:hidden;
+  }
+  .final-cta h2{font-size:clamp(28px,4vw,44px); font-weight:600; max-width:640px; margin-bottom:30px; line-height:1.15;}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--line); padding:60px 0 34px;}
+  .foot-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; margin-bottom:50px;}
+  .foot-brand p{color:var(--mute); font-size:13.5px; margin-top:14px; max-width:240px;}
+  .foot-col h4{font-size:12.5px; color:var(--mute-2); font-weight:600; margin-bottom:16px;}
+  .foot-col a{display:block; font-size:14px; color:var(--mute); margin-bottom:11px;}
+  .foot-col a:hover{color:var(--text);}
+  .foot-bottom{
+    display:flex; justify-content:space-between; padding-top:26px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--mute-2); flex-wrap:wrap; gap:10px;
+  }
+
+  /* ---------- responsive ---------- */
+  @media(max-width:900px){
+    .nav-links, .trust-row{display:none;}
+    .hamburger{display:flex;}
+    .hero-grid{grid-template-columns:1fr; gap:44px;}
+    .hero{padding-top:100px;}
+    .bento{grid-template-columns:1fr 1fr;}
+    .b-1,.b-2,.b-3{grid-column:span 2;}
+    .b-4,.b-5,.b-6{grid-column:span 1;}
+    .how-stage{grid-template-columns:1fr;}
+    .how-steps-list{position:static;}
+    .how-visual{height:320px;}
+    .usecases{grid-template-columns:1fr;}
+    .price-grid{grid-template-columns:1fr;}
+    .foot-grid{grid-template-columns:1fr 1fr; gap:30px;}
+  }
+  @media(max-width:560px){
+    .bento{grid-template-columns:1fr;}
+    .b-1,.b-2,.b-3,.b-4,.b-5,.b-6{grid-column:span 1;}
+    .b-1.flagship .chat-preview{display:none;}
+    .foot-grid{grid-template-columns:1fr;}
+    section{padding:56px 0;}
+  }
+
   @media(prefers-reduced-motion: reduce){
-    .rail-card-mover{animation:none; left:calc(75% - 70px);}
-    .rail-ping{animation:none; opacity:1;}
-    .rail-dot{animation:none;}
+    *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
   }
-  @media(max-width:480px){
-    /* Em telas estreitas o card animado colide com este selo — some com ele
-       em vez de tentar recalcular posições absolutas pra cada largura. */
-    .rail-ping{display:none;}
-  }
-  .rail-foot{margin-top:156px; padding-top:20px; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-size:11.5px; color:var(--mute-2);}
-  .rail-foot b{color:#fff; font-family:'Space Grotesk'; font-size:16px; display:block; margin-bottom:2px;}
-
-  /* MARQUEE integrations */
-  .marquee-wrap{border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:22px 0; overflow:hidden; -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);}
-  .marquee-track{display:flex; gap:14px; width:max-content; animation:scroll 26s linear infinite;}
-  @keyframes scroll{from{transform:translateX(0);} to{transform:translateX(-50%);}}
-  @media(prefers-reduced-motion: reduce){.marquee-track{animation:none;}}
-  .integ-chip{font-size:13.5px; color:var(--mute); font-weight:600; padding:8px 18px; border:1px solid var(--line); border-radius:20px; white-space:nowrap;}
-  .integ-chip b{color:var(--teal);}
-
-  /* SECTIONS */
-  section{padding:110px 0;}
-  @media(max-width:640px){section{padding:70px 0;}}
-  .section-head{max-width:580px; margin-bottom:60px;}
-  .section-eyebrow{font-size:12px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--teal); margin-bottom:14px;}
-  .section-head h2{font-size:36px; line-height:1.14; letter-spacing:-.015em; margin-bottom:16px;}
-  @media(max-width:640px){.section-head h2{font-size:27px;}}
-  .section-head p{color:var(--mute); font-size:16.5px;}
-
-  /* BIG STATS */
-  .stats-row{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:40px;}
-  @media(max-width:760px){.stats-row{grid-template-columns:1fr;}}
-  .stat-card{background:var(--card); border:1px solid var(--line); border-radius:20px; padding:32px 28px;}
-  .stat-num{font-family:'Space Grotesk'; font-size:52px; font-weight:700; line-height:1; margin-bottom:10px; background:linear-gradient(100deg,#fff,var(--teal) 90%); -webkit-background-clip:text; background-clip:text; color:transparent;}
-  .stat-label{font-size:14px; color:var(--mute);}
-
-  /* PROBLEM — bento */
-  .problem-bento{display:grid; grid-template-columns:1.4fr 1fr; grid-template-rows:auto auto; gap:14px;}
-  @media(max-width:820px){.problem-bento{grid-template-columns:1fr;}}
-  .problem-card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:26px; transition:.2s;}
-  .problem-card:hover{border-color:var(--line-2); transform:translateY(-3px);}
-  .problem-card.big{grid-row:span 2; display:flex; flex-direction:column; justify-content:space-between;}
-  .problem-card .icon{width:42px; height:42px; border-radius:10px; background:var(--coral-soft); color:var(--coral); display:flex; align-items:center; justify-content:center; margin-bottom:18px; font-size:18px; font-weight:700;}
-  .problem-card h3{font-size:17px; margin-bottom:10px;}
-  .problem-card.big h3{font-size:22px;}
-  .problem-card p{font-size:14px; color:var(--mute);}
-
-  /* HOW IT WORKS — zigzag drawn path */
-  .flow{position:relative; max-width:940px; margin:0 auto;}
-  .flow-path{position:absolute; left:50%; top:0; width:2px; height:100%; transform:translateX(-50%); z-index:0;}
-  .flow-path svg{width:100%; height:100%; overflow:visible;}
-  .flow-step{position:relative; z-index:1; display:grid; grid-template-columns:1fr 1fr; align-items:center; margin-bottom:14px;}
-  .flow-step .flow-card{background:var(--card-glass); backdrop-filter:blur(14px); border:1px solid var(--line); border-radius:16px; padding:24px 26px; max-width:410px; transition:.2s;}
-  .flow-step .flow-card:hover{border-color:rgba(26,201,168,.4); box-shadow:0 20px 50px rgba(0,0,0,.35);}
-  .flow-step:nth-child(odd) .flow-card{grid-column:1; justify-self:end; margin-right:44px;}
-  .flow-step:nth-child(even) .flow-card{grid-column:2; justify-self:start; margin-left:44px;}
-  .flow-node{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:14px; height:14px; border-radius:50%; background:var(--teal); box-shadow:0 0 0 6px rgba(26,201,168,.15), 0 0 22px var(--teal-glow); z-index:2;}
-  .flow-icon{width:40px; height:40px; border-radius:11px; background:var(--teal-soft); color:var(--teal); display:flex; align-items:center; justify-content:center; margin-bottom:16px; font-size:16px; font-weight:700;}
-  .flow-num{font-family:'Space Grotesk'; font-size:12px; font-weight:700; color:var(--teal); margin-bottom:8px; letter-spacing:.04em;}
-  .flow-card h3{font-size:17.5px; margin-bottom:9px;}
-  .flow-card p{font-size:14px; color:var(--mute); margin-bottom:14px;}
-  .flow-tags{display:flex; gap:6px; flex-wrap:wrap;}
-  .flow-step:nth-child(odd) .flow-tags{justify-content:flex-end;}
-  .flow-tag{font-size:10.5px; font-weight:600; padding:4px 11px; border-radius:14px; background:rgba(255,255,255,.04); color:var(--mute); border:1px solid var(--line);}
-  @media(max-width:760px){
-    .flow-path{left:22px; transform:none;}
-    .flow-step{grid-template-columns:1fr; margin-bottom:26px;}
-    .flow-step:nth-child(odd) .flow-card, .flow-step:nth-child(even) .flow-card{grid-column:1; justify-self:start; margin-left:56px; margin-right:0; max-width:100%;}
-    .flow-step:nth-child(odd) .flow-tags{justify-content:flex-start;}
-    .flow-node{left:22px;}
-  }
-
-  /* ROLES */
-  .roles-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:18px; max-width:700px;}
-  @media(max-width:620px){.roles-grid{grid-template-columns:1fr;}}
-  .role-card{border-radius:var(--radius); padding:28px; position:relative; border:1px solid var(--line); transition:.2s;}
-  .role-card:hover{transform:translateY(-3px);}
-  .role-card.doctor{background:linear-gradient(160deg,rgba(26,201,168,.14),rgba(26,201,168,.03)); border-color:rgba(26,201,168,.3);}
-  .role-card.closer{background:var(--card);}
-  .role-badge{display:inline-block; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; padding:5px 11px; border-radius:12px; margin-bottom:18px;}
-  .role-card.doctor .role-badge{background:rgba(26,201,168,.22); color:#84eeda;}
-  .role-card.closer .role-badge{background:rgba(255,255,255,.06); color:var(--mute);}
-  .role-card h3{font-size:19px; margin-bottom:11px;}
-  .role-card p{font-size:14px; color:var(--mute);}
-
-  /* PRICING */
-  .pricing-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px;}
-  @media(max-width:960px){.pricing-grid{grid-template-columns:1fr 1fr;}}
-  @media(max-width:600px){.pricing-grid{grid-template-columns:1fr;}}
-  .price-card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:30px 26px; display:flex; flex-direction:column; transition:.2s;}
-  .price-card:hover{border-color:var(--line-2); transform:translateY(-3px);}
-  .price-card.highlight{background:linear-gradient(165deg,#1a2c46,#0f1b30); border-color:rgba(240,184,92,.4); transform:translateY(-10px); box-shadow:0 30px 60px rgba(0,0,0,.5), 0 0 50px rgba(240,184,92,.1);}
-  .price-card.highlight:hover{transform:translateY(-13px);}
-  @media(max-width:960px){.price-card.highlight{transform:none;} .price-card.highlight:hover{transform:translateY(-3px);}}
-  .plan-ribbon{position:absolute; top:-14px; left:50%; transform:translateX(-50%); background:var(--amber); color:#241705; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; padding:6px 16px; border-radius:20px; white-space:nowrap; box-shadow:0 0 24px var(--amber-glow);}
-  .price-tag{font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--teal); margin-bottom:14px;}
-  .price-card.highlight .price-tag{color:var(--amber);}
-  .price-card h3{font-size:20px; margin-bottom:12px;}
-  .plan-price{font-family:'Space Grotesk'; font-size:32px; font-weight:700; margin-bottom:5px;}
-  .plan-price span{font-size:14px; font-weight:500; color:var(--mute);}
-  .plan-sub{font-size:12.5px; color:var(--mute); margin-bottom:24px;}
-  .price-list{list-style:none; margin-bottom:26px; flex:1;}
-  .price-list li{font-size:13.5px; padding:10px 0; border-top:1px solid var(--line); display:flex; gap:10px; color:var(--mute);}
-  .price-list li:first-child{border-top:none;}
-  .price-list li::before{content:'—'; color:var(--teal); font-weight:700; flex-shrink:0;}
-  .price-card.highlight .price-list li::before{color:var(--amber);}
-
-  /* CTA FOOTER */
-  .cta-section{text-align:center; padding:130px 0; position:relative;}
-  .cta-section h2{font-size:40px; margin-bottom:18px; max-width:600px; margin-inline:auto;}
-  @media(max-width:640px){.cta-section h2{font-size:28px;}}
-  .cta-section p{color:var(--mute); margin-bottom:36px; font-size:17px;}
-  footer{border-top:1px solid var(--line); padding:30px 0; color:var(--mute-2); font-size:12.5px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
 </style>
 </head>
 <body>
 
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
+<div id="loader"><div class="loader-mark">Prognexo</div></div>
 
-<nav>
-  <div class="nav-inner">
-    <div class="nav-logo"><div class="nav-mark">PX</div>Prognexo</div>
-    <div class="nav-links">
-      <a href="#problema">O problema</a>
-      <a href="#como-funciona">Como funciona</a>
-      <a href="#acessos">Acessos</a>
-      <a href="#planos">Planos</a>
-    </div>
-    <div class="nav-right">
-      <a href="https://app.prognexo.com.br/#/login" class="nav-login">Entrar</a>
-      <a href="#cta" class="nav-cta">Solicitar acesso</a>
-    </div>
-  </div>
-</nav>
+<div class="bg-field">
+  <div class="bg-grid"></div>
+  <div class="bg-glow a"></div>
+  <div class="bg-glow b"></div>
+</div>
 
-<header class="hero">
-  <div class="wrap hero-inner">
-    <div>
-      <div class="eyebrow">● Feito para clínicas e mentorias médicas</div>
-      <h1>Cada venda, do primeiro <span class="grad">"oi"</span> ao pagamento confirmado.</h1>
-      <p class="lead">O Prognexo conecta seu WhatsApp e suas plataformas de pagamento direto ao seu funil de vendas. Quando o dinheiro cai, o card fecha sozinho.</p>
-      <div class="hero-ctas">
-        <a href="#cta" class="btn-primary">Solicitar acesso →</a>
-        <a href="#como-funciona" class="btn-ghost">Ver como funciona</a>
+<header id="header">
+  <div class="container">
+    <nav>
+      <div class="logo"><span class="logo-dot"></span>Prognexo</div>
+      <div class="nav-links">
+        <a href="#produto">Produto</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#precos">Preços</a>
+        <a href="#faq">Perguntas</a>
       </div>
-      <p class="hero-note">Sem cartão de crédito. Configuração assistida na primeira semana.</p>
-    </div>
-
-    <div class="rail-card">
-      <div class="rail-title"><span class="rail-dot"></span>Pipeline em tempo real</div>
-      <div class="rail-track">
-        <div class="rail-stops">
-          <div class="rail-stop"></div><div class="rail-stop"></div><div class="rail-stop"></div><div class="rail-stop"></div><div class="rail-stop"></div>
-        </div>
+      <div class="nav-right">
+        <a href="https://app.prognexo.com.br/#/login" class="link-quiet">Entrar</a>
+        <a href="#cta" class="btn btn-primary">Solicitar acesso</a>
+        <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
       </div>
-      <div class="rail-labels">
-        <span>Lead</span><span>Conversa</span><span>Reunião</span><span>Proposta</span><span>Fechado</span>
-      </div>
-      <div class="rail-card-mover">
-        <div class="name">Camila Souza</div>
-        <div class="prod">Mentoria — R$ 1.997</div>
-        <span class="tag">High ticket</span>
-      </div>
-      <div class="rail-ping">✓ R$ 1.997 recebidos</div>
-      <div class="rail-foot">
-        <div><b>312</b>leads este mês</div>
-        <div><b>61%</b>taxa de resposta</div>
-        <div><b>R$ 41,6k</b>gerado</div>
-      </div>
-    </div>
+    </nav>
   </div>
 </header>
 
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-line"></span>CRM para quem vende e cuida de pacientes</div>
+      <h1>
+        <span>Cada venda vira lead.</span>
+        <span>Cada lead vira paciente.</span>
+        <span class="fade-line">Sem planilha no meio.</span>
+      </h1>
+      <p class="lede">Prognexo conecta suas vendas, seu WhatsApp e seu time de closers num único painel — leads chegam sozinhos, se distribuem sozinhos, e você responde sem sair da tela.</p>
+      <div class="hero-ctas">
+        <a href="#cta" class="btn btn-primary">Solicitar acesso</a>
+        <a href="#como-funciona" class="btn btn-ghost">Ver como funciona</a>
+      </div>
+    </div>
+
+    <div class="tilt-stage">
+      <div class="tilt-card" id="heroTilt">
+        <div class="mock-float">+12 leads hoje</div>
+        <div class="mock-topbar">
+          <div class="mock-dots"><span></span><span></span><span></span></div>
+          <div class="mock-title">Pipeline · Dra. Camila</div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-panel">
+            <h4>Em conversa</h4>
+            <div class="mock-lead t1"><span class="avatar"></span>Marina Souza</div>
+            <div class="mock-lead t2"><span class="avatar"></span>Rafael Lima</div>
+            <div class="mock-lead t3"><span class="avatar"></span>Bianca Reis</div>
+          </div>
+          <div class="mock-panel mock-chat">
+            <h4>WhatsApp</h4>
+            <div class="mock-bubble in">Oi! Vi o anúncio da mentoria</div>
+            <div class="mock-bubble out">Consigo te explicar agora 👍</div>
+            <div class="mock-bubble in">Perfeito, pode ser</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTEGRATIONS MARQUEE -->
 <div class="marquee-wrap">
+  <div class="container">
+    <p class="marquee-label">Conecta com o que você já usa</p>
+  </div>
   <div class="marquee-track">
-    <span class="integ-chip"><b>●</b> WhatsApp</span>
-    <span class="integ-chip"><b>●</b> Pagar.me</span>
-    <span class="integ-chip"><b>●</b> Kiwify</span>
-    <span class="integ-chip"><b>●</b> Hotmart</span>
-    <span class="integ-chip"><b>●</b> Ticto</span>
-    <span class="integ-chip"><b>●</b> WhatsApp</span>
-    <span class="integ-chip"><b>●</b> Pagar.me</span>
-    <span class="integ-chip"><b>●</b> Kiwify</span>
-    <span class="integ-chip"><b>●</b> Hotmart</span>
-    <span class="integ-chip"><b>●</b> Ticto</span>
+    <span>Kiwify</span><span>Hotmart</span><span>Ticto</span><span>Pagar.me</span><span>WhatsApp Business</span><span>Google Calendar</span><span>Asaas</span>
+    <span>Kiwify</span><span>Hotmart</span><span>Ticto</span><span>Pagar.me</span><span>WhatsApp Business</span><span>Google Calendar</span><span>Asaas</span>
   </div>
 </div>
 
-<section id="problema">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="section-eyebrow">O problema</div>
-      <h2>Sua clínica vende em quatro lugares diferentes. Seu controle vive numa planilha.</h2>
-      <p>Cada plataforma de pagamento fala uma língua. O WhatsApp não conversa com nenhuma delas.</p>
+<!-- BENTO / PRODUTO -->
+<section id="produto">
+  <div class="container">
+    <div class="sec-head">
+      <div class="kicker">O painel</div>
+      <h2>Tudo que hoje vive espalhado em 4 abas diferentes</h2>
+      <p>WhatsApp, planilha de leads, agenda do Google e relatório do financeiro — cada coisa no seu canto. O Prognexo junta isso num lugar só, sem trabalho manual.</p>
     </div>
-    <div class="problem-bento">
-      <div class="problem-card big">
-        <div>
-          <div class="icon">?</div>
-          <h3>Lead se perde na conversa</h3>
-          <p>Mensagem chega no WhatsApp, ninguém registra, e três dias depois ninguém lembra quem era, o que foi combinado ou em que pé a negociação parou.</p>
+
+    <div class="bento">
+      <div class="b-card b-1 flagship">
+        <span class="tag">Ao vivo</span>
+        <div class="chat-preview">
+          <div class="mock-bubble in" style="font-size:10.5px;">Quero saber mais</div>
+          <div class="mock-bubble out" style="font-size:10.5px;">Te chamo em 5 min!</div>
         </div>
+        <h3>Responda o WhatsApp de dentro do painel</h3>
+        <p>Sem abrir o celular. Sua mensagem sai pelo número real do médico, com histórico completo do lead e fila entre closers.</p>
       </div>
-      <div class="problem-card">
-        <div class="icon">✕</div>
-        <h3>Pagamento não avisa ninguém</h3>
-        <p>A venda acontece na Kiwify, Hotmart ou Ticto — e o time só fica sabendo se alguém contar.</p>
+      <div class="b-card b-2">
+        <div class="b-icon">⇄</div>
+        <h3>Distribuição automática</h3>
+        <p>Todo lead novo cai pro closer com menos conversa em aberto — ninguém trabalha mais que o outro, sem precisar de um gestor decidindo na mão.</p>
       </div>
-      <div class="problem-card">
-        <div class="icon">⟳</div>
-        <h3>Sem visão de equipe</h3>
-        <p>Com mais de um closer, ninguém sabe quem está com qual lead.</p>
+      <div class="b-card b-3">
+        <div class="b-icon">▤</div>
+        <h3>Funil visual</h3>
+        <p>Arraste um card de etapa e o funil inteiro se atualiza — sem planilha, sem "esqueci de mover esse lead".</p>
       </div>
-      <div class="problem-card">
-        <div class="icon">$</div>
-        <h3>Receita é um mistério</h3>
-        <p>Somar quatro plataformas todo mês não é controle, é adivinhação.</p>
+      <div class="b-card b-4">
+        <div class="b-icon">↺</div>
+        <h3>Reativação de pacientes</h3>
+        <p>O sistema avisa quem esfriou, antes de virar paciente perdido de vez.</p>
+      </div>
+      <div class="b-card b-5">
+        <div class="b-icon">▥</div>
+        <h3>Relatórios prontos</h3>
+        <p>Receita, conversão por closer, comparecimento — exportado, sem pedir pro financeiro.</p>
+      </div>
+      <div class="b-card b-6">
+        <div class="b-icon">◔</div>
+        <h3>Agenda sincronizada</h3>
+        <p>Sua agenda do Google e a do consultório são a mesma coisa, dos dois lados.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section id="como-funciona">
-  <div class="wrap">
-    <div class="section-head" style="margin-left:auto; margin-right:auto; text-align:center;">
-      <div class="section-eyebrow">Como funciona</div>
-      <h2>Do primeiro contato ao pagamento, cada passo se registra sozinho.</h2>
+<!-- COMO FUNCIONA (pinned scroll story) -->
+<section id="como-funciona" class="how-pin">
+  <div class="container">
+    <div class="sec-head">
+      <div class="kicker">Do clique à consulta</div>
+      <h2>Três etapas, nenhuma delas manual</h2>
     </div>
 
-    <div class="flow">
-      <div class="flow-path">
-        <svg viewBox="0 0 4 1300" preserveAspectRatio="none">
-          <path d="M2,0 L2,1300" stroke="url(#g)" stroke-width="2" fill="none"/>
-          <defs>
-            <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#1ac9a8" stop-opacity="0.5"/>
-              <stop offset="100%" stop-color="#1ac9a8" stop-opacity="0.08"/>
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
-
-      <div class="flow-step">
-        <div class="flow-node"></div>
-        <div class="flow-card">
-          <div class="flow-icon">①</div>
-          <div class="flow-num">PASSO 01</div>
-          <h3>O lead entra e já cai no funil</h3>
-          <p>Quiz, checklist ou anúncio — o card nasce automaticamente na etapa certa.</p>
-          <div class="flow-tags"><span class="flow-tag">Meta Ads</span><span class="flow-tag">Quiz</span></div>
+    <div class="how-stage">
+      <div class="how-steps-list" id="howSteps">
+        <div class="how-step active" data-step="0">
+          <div class="how-step-num">01</div>
+          <h3>Conecte suas vendas</h3>
+          <p>Kiwify, Hotmart, Ticto ou Pagar.me — qualquer venda vira lead automaticamente, sem digitar nada na mão.</p>
+        </div>
+        <div class="how-step" data-step="1">
+          <div class="how-step-num">02</div>
+          <h3>O lead se distribui sozinho</h3>
+          <p>Cai direto pro closer certo, já organizado num funil visual — sem grupo de WhatsApp decidindo quem atende quem.</p>
+        </div>
+        <div class="how-step" data-step="2">
+          <div class="how-step-num">03</div>
+          <h3>Feche pelo próprio WhatsApp</h3>
+          <p>Sua equipe responde de dentro do painel, com histórico e contexto — e você acompanha a conversão em tempo real.</p>
         </div>
       </div>
 
-      <div class="flow-step">
-        <div class="flow-node"></div>
-        <div class="flow-card">
-          <div class="flow-icon">②</div>
-          <div class="flow-num">PASSO 02</div>
-          <h3>A primeira mensagem move o card</h3>
-          <p>Quando o lead responde no WhatsApp, o card avança pra "conversa iniciada" sozinho.</p>
-          <div class="flow-tags"><span class="flow-tag">WhatsApp</span><span class="flow-tag">Tempo real</span></div>
+      <div class="how-visual">
+        <div class="how-frame active" data-frame="0">
+          <div class="flow-badge"><span class="dot"></span>Venda na Kiwify</div>
+          <div class="flow-arrow">↓ webhook automático</div>
+          <div class="flow-badge"><span class="dot" style="background:var(--amber);"></span>Lead criado no Prognexo</div>
         </div>
-      </div>
-
-      <div class="flow-step">
-        <div class="flow-node"></div>
-        <div class="flow-card">
-          <div class="flow-icon">③</div>
-          <div class="flow-num">PASSO 03</div>
-          <h3>O closer conduz a negociação</h3>
-          <p>Reunião marcada, proposta enviada — o card acompanha cada etapa real.</p>
-          <div class="flow-tags"><span class="flow-tag">Kanban</span></div>
+        <div class="how-frame" data-frame="1">
+          <div class="flow-badge"><span class="dot"></span>Lead novo</div>
+          <div class="flow-arrow">↓ round-robin</div>
+          <div class="flow-badge"><span class="dot" style="background:var(--amber);"></span>Closer com menos fila</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-badge"><span class="dot" style="background:var(--coral);"></span>Card no funil</div>
         </div>
-      </div>
-
-      <div class="flow-step">
-        <div class="flow-node"></div>
-        <div class="flow-card">
-          <div class="flow-icon">④</div>
-          <div class="flow-num">PASSO 04</div>
-          <h3>O pagamento fecha a venda</h3>
-          <p>Assim que o gateway confirma, o card vai direto pra "fechado" e entra na receita.</p>
-          <div class="flow-tags"><span class="flow-tag">Pagar.me</span><span class="flow-tag">Kiwify</span><span class="flow-tag">Hotmart</span><span class="flow-tag">Ticto</span></div>
-        </div>
-      </div>
-
-      <div class="flow-step">
-        <div class="flow-node"></div>
-        <div class="flow-card">
-          <div class="flow-icon">⑤</div>
-          <div class="flow-num">PASSO 05</div>
-          <h3>Nada se perde</h3>
-          <p>Conversa, movimento de etapa e pagamento — tudo registrado, pra sempre.</p>
-          <div class="flow-tags"><span class="flow-tag">Histórico completo</span></div>
+        <div class="how-frame" data-frame="2">
+          <div class="mock-bubble in">Ainda dá tempo de entrar?</div>
+          <div class="mock-bubble out">Dá sim! Te mando o link agora</div>
+          <div class="flow-badge" style="margin-top:8px;"><span class="dot"></span>Respondido em 2 min</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="acessos">
-  <div class="wrap">
-    <div class="stats-row">
-      <div class="stat-card"><div class="stat-num">100%</div><div class="stat-label">das mensagens do WhatsApp rastreadas automaticamente, sem custo por mensagem</div></div>
-      <div class="stat-card"><div class="stat-num">4</div><div class="stat-label">plataformas de pagamento conectadas direto no seu pipeline</div></div>
-      <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">planilhas pra atualizar no fim do mês</div></div>
+<!-- USE CASES -->
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <div class="kicker">Feito para</div>
+      <h2>Três formas de operação, um painel só</h2>
     </div>
-    <div class="section-head">
-      <div class="section-eyebrow">Feito pra equipe de verdade</div>
-      <h2>Você decide quem vê o quê.</h2>
-      <p>Você convida os closers que quiser. Cada um vê só a própria carteira — sem bagunça, sem gente mexendo na venda de outro.</p>
-    </div>
-    <div class="roles-grid">
-      <div class="role-card doctor">
-        <span class="role-badge">Dono da conta</span>
-        <h3>No controle total</h3>
-        <p>Convida quantos closers quiser — ou fecha as próprias vendas. A decisão é sempre sua.</p>
+    <div class="usecases">
+      <div class="uc-card">
+        <div class="num">Mentorias e cursos</div>
+        <h3>Venda recorrente, vários produtos</h3>
+        <p>Cada lançamento cai automaticamente no funil certo, sem misturar quem comprou o quê.</p>
       </div>
-      <div class="role-card closer">
-        <span class="role-badge">Closer</span>
-        <h3>Foco na carteira</h3>
-        <p>Vê só os leads atribuídos a ele. Sem ruído, sem mexer no que não é dele.</p>
+      <div class="uc-card">
+        <div class="num">Clínicas e consultórios</div>
+        <h3>Agenda cheia, sem paciente esquecido</h3>
+        <p>Reativação automática avisa quem sumiu antes que vire falta definitiva.</p>
+      </div>
+      <div class="uc-card">
+        <div class="num">Times com vários closers</div>
+        <h3>Fila justa, métrica clara</h3>
+        <p>Cada closer vê só os próprios leads — comissão sem discussão sobre quem atendeu quem.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section id="planos">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="section-eyebrow">Planos</div>
-      <h2>Uma plataforma completa. Sem limite de leads ou closers.</h2>
-      <p>Economize optando pelo plano anual ou semestral.</p>
+<!-- PRICING -->
+<section id="precos">
+  <div class="container">
+    <div class="sec-head">
+      <div class="kicker">Investimento</div>
+      <h2>Dois planos, sem letra miúda</h2>
+      <p>Cancela quando quiser. Sem fidelidade, sem taxa de setup.</p>
     </div>
-    <div class="pricing-grid">
+
+    <div class="price-toggle" id="priceToggle">
+      <button class="active" data-cycle="mensal">Mensal</button>
+      <button data-cycle="trimestral">Trimestral</button>
+      <button data-cycle="semestral">Semestral</button>
+      <button data-cycle="anual">Anual</button>
+    </div>
+
+    <div class="price-grid">
       <div class="price-card">
-        <div class="price-tag">Sem fidelidade</div>
-        <h3>Mensal</h3>
-        <div class="plan-price">R$ 197<span>/mês</span></div>
-        <div class="plan-sub">Pagamento mês a mês</div>
-        <ul class="price-list">
-          <li>Leads e closers ilimitados</li>
-          <li>WhatsApp + gateways de pagamento</li>
-          <li>Pipeline e dashboard completos</li>
+        <div class="plan-name">Vendas</div>
+        <div class="plan-value"><sup>R$</sup><span id="priceVendas">197</span></div>
+        <div class="plan-cycle">por mês</div>
+        <ul class="price-feats">
+          <li><span class="ck">✓</span>Leads ilimitados</li>
+          <li><span class="ck">✓</span>Funil visual (pipeline)</li>
+          <li><span class="ck">✓</span>Distribuição automática entre closers</li>
+          <li><span class="ck">✓</span>Relatórios e exportação</li>
         </ul>
-        <a href="https://app.prognexo.com.br/#/meu-plano?modulo=vendas&periodicidade=mensal" class="btn-ghost" style="width:100%; justify-content:center;">Começar agora</a>
+        <a href="https://app.prognexo.com.br/#/meu-plano?modulo=vendas&periodicidade=mensal" class="btn btn-ghost" style="width:100%;">Começar agora</a>
       </div>
-      <div class="price-card">
-        <div class="price-tag">Economia de 15%</div>
-        <h3>Trimestral</h3>
-        <div class="plan-price">R$ 167<span>/mês</span></div>
-        <div class="plan-sub">3x de R$ 167 · R$ 501 no total</div>
-        <ul class="price-list">
-          <li>Leads e closers ilimitados</li>
-          <li>WhatsApp + gateways de pagamento</li>
-          <li>Pipeline e dashboard completos</li>
+
+      <div class="price-card highlight">
+        <div class="plan-name">Combo</div>
+        <div class="plan-value"><sup>R$</sup>247</div>
+        <div class="plan-cycle">por mês · tudo incluso</div>
+        <ul class="price-feats">
+          <li><span class="ck">✓</span>Tudo do plano Vendas</li>
+          <li><span class="ck">✓</span>WhatsApp integrado ao painel</li>
+          <li><span class="ck">✓</span>Agenda sincronizada com Google</li>
+          <li><span class="ck">✓</span>Reativação automática de pacientes</li>
         </ul>
-        <a href="https://app.prognexo.com.br/#/meu-plano?modulo=vendas&periodicidade=trimestral" class="btn-ghost" style="width:100%; justify-content:center;">Começar agora</a>
-      </div>
-      <div class="price-card highlight" style="position:relative;">
-        <div class="plan-ribbon">Mais escolhido</div>
-        <div class="price-tag">Economia de 25%</div>
-        <h3>Semestral</h3>
-        <div class="plan-price">R$ 147<span>/mês</span></div>
-        <div class="plan-sub">6x de R$ 147 · R$ 882 no total</div>
-        <ul class="price-list">
-          <li>Leads e closers ilimitados</li>
-          <li>WhatsApp + gateways de pagamento</li>
-          <li>Pipeline e dashboard completos</li>
-          <li>Configuração assistida</li>
-        </ul>
-        <a href="https://app.prognexo.com.br/#/meu-plano?modulo=vendas&periodicidade=semestral" class="btn-primary" style="width:100%; justify-content:center;">Começar agora</a>
-      </div>
-      <div class="price-card">
-        <div class="price-tag">Melhor custo-benefício</div>
-        <h3>Anual</h3>
-        <div class="plan-price">R$ 117<span>/mês</span></div>
-        <div class="plan-sub">12x de R$ 117 · R$ 1.404 no total</div>
-        <ul class="price-list">
-          <li>Leads e closers ilimitados</li>
-          <li>WhatsApp + gateways de pagamento</li>
-          <li>Pipeline e dashboard completos</li>
-          <li>Configuração assistida</li>
-        </ul>
-        <a href="https://app.prognexo.com.br/#/meu-plano?modulo=vendas&periodicidade=anual" class="btn-ghost" style="width:100%; justify-content:center;">Começar agora</a>
+        <a href="https://app.prognexo.com.br/#/cadastro" class="btn btn-primary" style="width:100%;">Começar agora</a>
       </div>
     </div>
-    <p style="text-align:center; margin-top:30px; font-size:13px; color:var(--mute);">🛡️ 30 dias de garantia incondicional. Se não fizer sentido, devolvemos 100% do valor.</p>
   </div>
 </section>
 
-<section class="cta-section" id="cta">
-  <div class="wrap">
-    <h2>Pare de perder venda no meio da bagunça.</h2>
-    <p>Leva 15 minutos pra configurar seu primeiro pipeline.</p>
-    <a href="https://wa.me/554430472098" class="btn-primary">Falar no WhatsApp →</a>
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="sec-head">
+      <div class="kicker">Dúvidas comuns</div>
+      <h2>Perguntas que todo médico faz antes de trocar de sistema</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item open">
+        <div class="faq-q">Preciso trocar de número de WhatsApp?<span class="faq-plus">+</span></div>
+        <div class="faq-a"><p>Não. Você conecta o número que já usa hoje, via WhatsApp Business API — nada muda pra quem te escreve.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Dá pra usar Kiwify e Hotmart ao mesmo tempo?<span class="faq-plus">+</span></div>
+        <div class="faq-a"><p>Dá. Você pode conectar as quatro plataformas (Kiwify, Hotmart, Ticto e Pagar.me) ao mesmo tempo — cada venda vira lead, não importa de onde veio.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Meu closer vê os dados de outros médicos?<span class="faq-plus">+</span></div>
+        <div class="faq-a"><p>Não. O acesso é isolado por médico — cada closer só enxerga os leads que foram atribuídos a ele.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Tem fidelidade ou contrato de permanência?<span class="faq-plus">+</span></div>
+        <div class="faq-a"><p>Não. É mensal, e você cancela quando quiser, direto pelo painel.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Dá pra importar minha base de leads atual?<span class="faq-plus">+</span></div>
+        <div class="faq-a"><p>Dá, por planilha. Nossa equipe te ajuda na primeira importação sem custo.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Preciso saber programar pra configurar?<span class="faq-plus">+</span></div>
+        <div class="faq-a"><p>Não. Cada integração é feita colando um link — sem código, sem desenvolvedor.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="cta" class="final-cta">
+  <div class="container">
+    <div class="final-cta-inner">
+      <div class="kicker" style="margin-bottom:16px;">Comece hoje</div>
+      <h2>Pare de perder lead por mensagem que ninguém respondeu a tempo.</h2>
+      <a href="https://app.prognexo.com.br/#/cadastro" class="btn btn-primary">Solicitar acesso</a>
+    </div>
   </div>
 </section>
 
 <footer>
-  <div class="wrap" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; width:100%;">
-    <div>Prognexo — desenvolvido por Paes Technology</div>
-    <div>© 2026 Todos os direitos reservados</div>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="logo"><span class="logo-dot"></span>Prognexo</div>
+        <p>CRM para médicos e clínicas que vendem online e cuidam de pacientes recorrentes.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Produto</h4>
+        <a href="#produto">Funcionalidades</a>
+        <a href="#precos">Preços</a>
+        <a href="#faq">Perguntas</a>
+      </div>
+      <div class="foot-col">
+        <h4>Empresa</h4>
+        <a href="https://wa.me/554430472098">Falar no WhatsApp</a>
+        <a href="https://app.prognexo.com.br/#/login">Acessar minha conta</a>
+      </div>
+      <div class="foot-col">
+        <h4>Legal</h4>
+        <a href="#">Termos de uso</a>
+        <a href="#">Privacidade</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Prognexo — um produto Paes Technology</span>
+      <span>Maringá, PR</span>
+    </div>
   </div>
 </footer>
+
+<script>
+  // loader
+  window.addEventListener('load', () => {
+    setTimeout(() => document.getElementById('loader').classList.add('hide'), 500);
+  });
+
+  // header on scroll
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 30);
+  }, { passive: true });
+
+  // mobile hamburger -> just toggles nav links visibility inline for preview
+  const hamburger = document.getElementById('hamburger');
+  hamburger?.addEventListener('click', () => {
+    const links = document.querySelector('.nav-links');
+    const visible = links.style.display === 'flex';
+    links.style.display = visible ? 'none' : 'flex';
+    links.style.cssText += visible ? '' : 'position:fixed; top:64px; left:0; right:0; background:rgba(7,11,21,.98); flex-direction:column; padding:24px; gap:20px; border-bottom:1px solid var(--line);';
+  });
+
+  // ---- signature interaction: pointer-follow 3D tilt ----
+  function attachTilt(el, maxDeg = 10) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let raf = null;
+    function handle(x, y) {
+      const rect = el.getBoundingClientRect();
+      const px = (x - rect.left) / rect.width - 0.5;
+      const py = (y - rect.top) / rect.height - 0.5;
+      const rotY = px * maxDeg * 2;
+      const rotX = -py * maxDeg * 2;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        el.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+      });
+    }
+    el.addEventListener('pointermove', (e) => handle(e.clientX, e.clientY));
+    el.addEventListener('pointerleave', () => {
+      cancelAnimationFrame(raf);
+      el.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
+  }
+  attachTilt(document.getElementById('heroTilt'), 9);
+
+  // ---- FAQ accordion ----
+  document.querySelectorAll('.faq-item').forEach((item) => {
+    const q = item.querySelector('.faq-q');
+    const a = item.querySelector('.faq-a');
+    if (item.classList.contains('open')) a.style.maxHeight = a.scrollHeight + 'px';
+    q.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach((i) => {
+        i.classList.remove('open');
+        i.querySelector('.faq-a').style.maxHeight = null;
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        a.style.maxHeight = a.scrollHeight + 'px';
+      }
+    });
+  });
+
+  // ---- pricing toggle ----
+  const cyclePrices = { mensal: 197, trimestral: 167, semestral: 147, anual: 117 };
+  document.getElementById('priceToggle').addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    document.querySelectorAll('#priceToggle button').forEach((b) => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('priceVendas').textContent = cyclePrices[btn.dataset.cycle];
+    document.querySelectorAll('.price-card a.btn').forEach((a) => {
+      if (a.href.includes('meu-plano')) {
+        const url = new URL(a.href);
+        url.searchParams.set('periodicidade', btn.dataset.cycle);
+        a.href = url.toString();
+      }
+    });
+  });
+
+  // ---- how-it-works: scroll-driven step switching ----
+  const steps = document.querySelectorAll('.how-step');
+  const frames = document.querySelectorAll('.how-frame');
+  const howSection = document.getElementById('como-funciona');
+
+  function setStep(i) {
+    steps.forEach((s, idx) => s.classList.toggle('active', idx === i));
+    frames.forEach((f, idx) => f.classList.toggle('active', idx === i));
+  }
+  steps.forEach((s) => s.addEventListener('click', () => setStep(Number(s.dataset.step))));
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const rect = howSection.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const total = rect.height - vh;
+      if (total > 0 && rect.top < vh * 0.3 && rect.bottom > vh * 0.3) {
+        const progress = Math.min(1, Math.max(0, (-rect.top) / total));
+        const idx = Math.min(steps.length - 1, Math.floor(progress * steps.length));
+        setStep(idx);
+      }
+      ticking = false;
+    });
+  }, { passive: true });
+</script>
 
 </body>
 </html>
