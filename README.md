@@ -1,6 +1,6 @@
 # Prognexo — site comercial
 
-Página estática de apresentação da visão Full, com glassmorphism, identidade Prognexo, imagem institucional do painel, comparação de planos e simulador de contribuição. Publicar a raiz do repositório; não há build ou dependências.
+Página estática de apresentação da plataforma Prognexo, com glassmorphism, identidade Prognexo, imagem institucional do painel, comparação de planos e simulador de contribuição. Publicar a raiz do repositório; não há build ou dependências.
 
 ## Conexões preservadas
 
@@ -12,7 +12,7 @@ Página estática de apresentação da visão Full, com glassmorphism, identidad
 
 O formulário valida nome, clínica, e-mail e autorização; abre o WhatsApp com o diagnóstico preenchido. O visitante revisa e confirma o envio no WhatsApp. Se o navegador bloquear a aba, um link alternativo fica disponível. O site não registra dados, não envia mensagens automaticamente e não realiza cobranças.
 
-Os planos Full são propostas sujeitas à validação e disponibilidade. O link da assinatura acessa a operação atual; não atribui planos Full nem altera preços no backend.
+Os planos do Prognexo são propostas sujeitas à validação e disponibilidade. O link da assinatura acessa a operação atual; não atribui planos do Prognexo nem altera preços no backend.
 
 WhatsApp Cloud API, pagamentos, automações e webhooks do produto ficam no frontend/backend do Prognexo. Seus nomes nesta landing não representam novas implementações dessas integrações.
 
